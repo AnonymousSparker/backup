@@ -1,0 +1,223 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #111111;
+  
+}
+
+nav {
+  width: 100%;
+  height: 60px;
+  padding-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+nav > div {
+  width: 85%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav > div > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+nav > div > div > span {
+  width: 15px;
+  height: 15px;
+  background: #9eff5d;
+  border-radius: 15px;
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+nav > div > h1 {
+  color: #ffffff;
+  font-family: "Ruslan Display", sans-serif;
+  user-select: none;
+  font-size: 24px;
+}
+
+main {
+  width: 100%;
+  height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  overflow: hidden;
+}
+
+#snap-screen {
+  max-width: 100%;
+  height: 360px;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  
+}
+#snap-screen > .displayed {
+  height: 360px;
+  overflow: hidden;
+  width: 250px;
+  border: 5px solid #111111;
+  position: absolute;
+  z-index: 50;
+  border-radius: 55px;
+  background: wheat;
+}
+#snap-screen > div > img {
+  height: 100%;
+  width: 100%;
+  /* opacity: 0; */
+}
+#snap-screen > .display1 {
+  height: 333px;
+  width: 233px;
+  background: #242424;
+  position: absolute;
+  overflow: hidden;
+  border-radius: 55px;
+  transform-origin: bottom right;
+  transform: rotateZ(2deg) translateX(15px) translateY(-7px);
+  z-index: 40;
+  opacity: 0.5;
+}
+#snap-screen > .display2 {
+  height: 333px;
+  width: 233px;
+  background: #242424;
+  position: absolute;
+  border-radius: 55px;
+  overflow: hidden;
+  transform-origin: bottom left;
+  transform: rotateZ(-2deg) translateX(-15px) translateY(-7px);
+  z-index: 40;
+  opacity: 0.5;
+}
+#snap-screen > .display3 {
+  height: 305px;
+  width: 211px;
+  background: #3b3b3b;
+  position: absolute;
+  border-radius: 55px;
+  overflow: hidden;
+  transform-origin: bottom right;
+  transform: rotateZ(8deg) translateX(17px) translateY(-17px);
+  z-index: 30;
+  opacity: 0.3;
+}
+#snap-screen > .display4 {
+  height: 305px;
+  width: 211px;
+  background: #3b3b3b;
+  position: absolute;
+  border-radius: 55px;
+  overflow: hidden;
+  transform-origin: bottom left;
+  transform: rotateZ(-8deg) translateX(-17px) translateY(-17px);
+  z-index: 30;
+  opacity: 0.3;
+}
+
+#status-screen {
+  width: 100%;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* display: none; */
+}
+.status-bubble {
+  min-width: 285px;
+  height: 120px;
+  background-color: #1f1f1f;
+  border-radius: 30px;
+  box-shadow: 0 4px 10.7px #00000025;
+  margin-inline: 10px;
+  opacity: 0.75;
+  padding: 16px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.status-bubble:nth-child(3) {
+  opacity: 1;
+}
+.status-bubble > .textbox {
+  color: #f0f0f0;
+  font-family: "noto sans";
+  font-size: 14px;
+  width: 100%;
+}
+.status-bubble > .stamper {
+  color: #828282;
+  font-family: "Nova Round", sans-serif;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+footer {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+footer > div {
+    width: 100%;
+    height: 75px;
+    background: #1f1f1f;
+    /* border-radius: 80px; */
+    box-shadow: 0 4px 10.7px #00000025;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+footer > div>button{
+    height: 45px;
+    background: #2a2a2a;
+    border: none;
+    border-radius: 80px;
+    font-family: "Nova Round", sans-serif;
+    font-size: 13px;
+    color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    cursor: pointer;
+}
+footer > div>button:nth-child(1){
+    width: 172px;
+}
+footer > div> button:nth-child(2){
+    width: 85px;
+}
+footer > div> button:nth-child(3),footer > div> button:nth-child(4){
+    width: 35px;
+    height: 35px;
+}
+
+footer > div> button:nth-child(3)>span{
+    width: 25px;
+    height: 25px;
+    border-radius: 30px;
+    background-color: #9eff5d;
+  animation: blink 1.5s ease-in-out infinite;
+}
+

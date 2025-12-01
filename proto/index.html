@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get'em - Login</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nova+Round&family=Ruslan+Display&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'ruslan': ['"Ruslan Display"', 'serif'],
+                        'nova': ['"Nova Round"', 'sans-serif'],
+                        'noto': ['"Noto Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        bg: '#111111',
+                        surface: '#1f1f1f',
+                        'surface-light': '#2a2a2a',
+                        accent: '#9eff5d',
+                    },
+                    animation: {
+                        blink: 'blink 1.5s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        blink: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.5' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-900 min-h-screen flex items-center justify-center font-noto">
+
+    <!-- Mobile Wrapper -->
+    <div
+        class="w-full max-w-md h-[100vh] bg-bg relative overflow-hidden flex flex-col justify-center items-center shadow-2xl border-x border-gray-800 p-8">
+
+        <!-- Background Decor -->
+        <div class="absolute top-[-50px] right-[-50px] w-40 h-40 bg-accent rounded-full blur-[80px] opacity-10"></div>
+        <div class="absolute bottom-[-50px] left-[-50px] w-40 h-40 bg-purple-500 rounded-full blur-[80px] opacity-10">
+        </div>
+
+        <!-- Brand Section -->
+        <div class="flex flex-col items-center mb-16">
+            <div class="relative">
+                <h1 class="text-white font-ruslan text-6xl select-none tracking-wider">GET'EM</h1>
+                <span
+                    class="absolute -top-1 -right-4 w-[15px] h-[15px] bg-accent rounded-full animate-blink shadow-[0_0_10px_#9eff5d]"></span>
+            </div>
+            <p class="text-gray-400 font-nova text-sm mt-2 tracking-widest uppercase">The inner circle</p>
+        </div>
+
+        <!-- Login Actions -->
+        <div class="w-full space-y-4 z-10">
+            <!-- Google Login Button -->
+            <button id="google-login-btn"
+                class="w-full h-[55px] bg-white text-black rounded-full font-nova font-bold flex items-center justify-center gap-3 hover:bg-gray-200 transition-transform active:scale-95 shadow-lg group">
+                <ion-icon name="logo-google" class="text-xl"></ion-icon>
+                <span>Continue with Google</span>
+                <ion-icon name="arrow-forward"
+                    class="text-xl opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all"></ion-icon>
+            </button>
+
+            <!-- Loading State (Hidden by default) -->
+            <div id="loading-indicator" class="hidden w-full flex justify-center py-4">
+                <div class="w-8 h-8 border-4 border-surface-light border-t-accent rounded-full animate-spin"></div>
+            </div>
+
+            <p class="text-[#444] text-xs text-center mt-6 px-8 leading-relaxed">
+                By continuing, you agree to enter a private, encrypted space.
+                <br>What happens in the Gem, stays in the Gem.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="absolute bottom-8 text-[#333] text-[10px] font-mono">
+            v1.0.0 &bull; SECURE CONNECTION
+        </div>
+
+    </div>
+
+    <!-- Firebase Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4QVr5t0FChzImAJtYJulPut1QMCWbjH4",
+            authDomain: "get-em-531b8.firebaseapp.com",
+            projectId: "get-em-531b8",
+            storageBucket: "get-em-531b8.firebasestorage.app",
+            messagingSenderId: "114317158210",
+            appId: "1:114317158210:web:3cc9a17c250dd042b94adb",
+            measurementId: "G-79NV0DJXD0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const loginBtn = document.getElementById('google-login-btn');
+        const loader = document.getElementById('loading-indicator');
+
+        // Handle Auth State
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                console.log("User detected, redirecting...");
+
+                // Optional: Create/Update user doc on login
+                const userRef = doc(db, "users", user.uid);
+                try {
+                    const userSnap = await getDoc(userRef);
+                    if (!userSnap.exists()) {
+                        // Create basic profile if new
+                        await setDoc(userRef, {
+                            uid: user.uid,
+                            email: user.email,
+                            displayName: user.displayName,
+                            photoURL: user.photoURL,
+                            createdAt: serverTimestamp(),
+                            platinum_status: "available",
+                            is_busy: false // default availability
+                        });
+                    }
+                } catch (e) {
+                    console.error("Error setting up user profile:", e);
+                }
+
+                // Redirect to main app
+                window.location.href = './pages/home/page.html';
+            }
+        });
+
+        // Handle Login Click
+        loginBtn.addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
+
+            // UI Toggle
+            loginBtn.classList.add('hidden');
+            loader.classList.remove('hidden');
+
+            try {
+                await signInWithPopup(auth, provider);
+                // Redirect handled by onAuthStateChanged
+            } catch (error) {
+                console.error("Login failed", error);
+                alert("Login failed: " + error.message);
+                loginBtn.classList.remove('hidden');
+                loader.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>

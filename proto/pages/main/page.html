@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get'em - Home</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nova+Round&family=Ruslan+Display&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'ruslan': ['"Ruslan Display"', 'serif'],
+                        'nova': ['"Nova Round"', 'sans-serif'],
+                        'noto': ['"Noto Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        bg: '#111111',
+                        surface: '#1f1f1f',
+                        'surface-light': '#2a2a2a',
+                        accent: '#9eff5d',
+                        'card-dark': '#242424',
+                        'card-dim': '#3b3b3b',
+                    },
+                    keyframes: {
+                        blink: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.5' },
+                        }
+                    },
+                    animation: {
+                        blink: 'blink 1.5s ease-in-out infinite',
+                    },
+                    boxShadow: {
+                        'bubble': '0 4px 10.7px #00000025',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .card-display-1 { transform-origin: bottom right; transform: rotateZ(2deg) translateX(15px) translateY(-7px); }
+            .card-display-2 { transform-origin: bottom left; transform: rotateZ(-2deg) translateX(-15px) translateY(-7px); }
+            .card-display-3 { transform-origin: bottom right; transform: rotateZ(8deg) translateX(17px) translateY(-17px); }
+            .card-display-4 { transform-origin: bottom left; transform: rotateZ(-8deg) translateX(-17px) translateY(-17px); }
+        }
+        #status-screen::-webkit-scrollbar { display: none; }
+        #status-screen { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+
+    <!-- AUTH GUARD -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4QVr5t0FChzImAJtYJulPut1QMCWbjH4",
+            authDomain: "get-em-531b8.firebaseapp.com",
+            projectId: "get-em-531b8",
+            storageBucket: "get-em-531b8.firebasestorage.app",
+            messagingSenderId: "114317158210",
+            appId: "1:114317158210:web:3cc9a17c250dd042b94adb",
+            measurementId: "G-79NV0DJXD0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Check if user is logged in
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // No user is signed in, redirect to login page
+                console.log("No user found, redirecting to login...");
+                // Adjust path based on your folder structure relative to this file
+                window.location.href = '../../index.html';
+            } else {
+                console.log("User authenticated:", user.email);
+            }
+        });
+
+        // Global sign out function for testing/menu
+        window.logout = () => {
+            signOut(auth).then(() => {
+                window.location.href = '../../index.html';
+            });
+        };
+    </script>
+</head>
+
+<body class="bg-gray-900 min-h-screen flex items-center justify-center font-noto">
+
+    <!-- Mobile Wrapper -->
+    <div
+        class="w-full max-w-md h-[100vh] bg-bg relative overflow-hidden flex flex-col justify-between shadow-2xl border-x border-gray-800">
+
+        <!-- Navigation -->
+        <nav class="w-full h-[60px] pt-[30px] flex justify-center shrink-0">
+            <div class="w-[85%] flex justify-between items-center">
+                <h1 class="text-white font-ruslan text-2xl select-none" onclick="window.logout()">GET'EM</h1>
+                <div class="flex justify-center items-center">
+                    <span class="w-[15px] h-[15px] bg-accent rounded-full animate-blink"></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="w-full flex-1 flex flex-col justify-around overflow-hidden pb-4">
+
+            <!-- Snap Screen (Card Stack) -->
+            <div id="snap-screen" class="w-full h-[360px] flex items-end justify-center relative mt-4">
+                <div
+                    class="display4 h-[305px] w-[211px] bg-card-dim absolute rounded-[55px] overflow-hidden z-30 opacity-30 card-display-4">
+                    <img src="https://lens-preview-storage.storage.googleapis.com/previewmedia/preview_thumbnail/f807a476-44a3-4c64-847e-e8903d0e457d.webp"
+                        class="h-full w-full object-cover" alt="" />
+                </div>
+                <div
+                    class="display3 h-[305px] w-[211px] bg-card-dim absolute rounded-[55px] overflow-hidden z-30 opacity-30 card-display-3">
+                    <img src="https://lens-preview-storage.storage.googleapis.com/previewmedia/preview_thumbnail/88ef07dc-0b4b-40c6-b2ed-f7522ebe339c.webp"
+                        class="h-full w-full object-cover" alt="" />
+                </div>
+                <div
+                    class="display2 h-[333px] w-[233px] bg-card-dark absolute rounded-[55px] overflow-hidden z-40 opacity-50 card-display-2">
+                    <img src="https://i.pinimg.com/1200x/d9/27/e5/d927e5b5bd4528683729a7a74bcfe4f3.jpg"
+                        class="h-full w-full object-cover" alt="" />
+                </div>
+                <div
+                    class="display1 h-[333px] w-[233px] bg-card-dark absolute rounded-[55px] overflow-hidden z-40 opacity-50 card-display-1">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfKFjANb3SSJv_fBsEMyxS6ogeOIcYrlP1yg&s"
+                        class="h-full w-full object-cover" alt="" />
+                </div>
+                <div
+                    class="displayed h-[360px] w-[250px] border-[5px] border-bg absolute z-50 rounded-[55px] bg-orange-100 overflow-hidden shadow-lg">
+                    <img src="https://images.pexels.com/photos/7737080/pexels-photo-7737080.jpeg"
+                        class="h-full w-full object-cover" alt="" />
+                </div>
+            </div>
+
+            <!-- Status Screen (Text Bubble Carousel) -->
+            <div id="status-screen"
+                class="w-full h-[130px] flex items-center overflow-x-auto whitespace-nowrap snap-x snap-mandatory px-[50%] box-content">
+                <div
+                    class="status-bubble min-w-[285px] h-[120px] bg-surface rounded-[30px] shadow-bubble mx-[10px] opacity-75 p-[16px] px-[25px] flex flex-col justify-between whitespace-normal shrink-0 snap-center transition-opacity duration-300">
+                    <div class="textbox text-gray-400 font-noto text-sm w-full">
+                        <p>Previous snap status...</p>
+                    </div>
+                </div>
+                <div
+                    class="status-bubble min-w-[285px] h-[120px] bg-surface rounded-[30px] shadow-bubble mx-[10px] opacity-100 p-[16px] px-[25px] flex flex-col justify-between whitespace-normal shrink-0 snap-center transition-opacity duration-300">
+                    <div class="textbox text-gray-100 font-noto text-sm w-full">
+                        <p><span class="text-[#828282]">Her :</span> drinking coffee... will update you in an hour or so
+                        </p>
+                    </div>
+                    <div class="stamper text-[#828282] font-nova text-xs flex justify-between w-full">
+                        <span>see more...</span>
+                        <span>03:05 pm</span>
+                    </div>
+                </div>
+                <div
+                    class="status-bubble min-w-[285px] h-[120px] bg-surface rounded-[30px] shadow-bubble mx-[10px] opacity-75 p-[16px] px-[25px] flex flex-col justify-between whitespace-normal shrink-0 snap-center transition-opacity duration-300">
+                    <div class="textbox text-gray-400 font-noto text-sm w-full">
+                        <p>Next snap status placeholder...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer / Control Bar -->
+        <footer class="w-full h-[100px] flex justify-center items-center shrink-0 mb-2">
+            <div class="w-full h-[75px] bg-surface shadow-bubble flex items-center justify-evenly px-2">
+                <button
+                    class="w-[172px] h-[45px] bg-surface-light border-none rounded-none font-nova text-[13px] text-gray-100 flex items-center justify-evenly cursor-pointer hover:bg-[#333] transition-colors">
+                    <ion-icon name="sparkles-outline" class="text-lg"></ion-icon> View your snap
+                </button>
+                <button
+                    class="w-[85px] h-[45px] bg-surface-light border-none rounded-none font-nova text-[13px] text-gray-100 flex items-center justify-evenly cursor-pointer hover:bg-[#333] transition-colors">
+                    <ion-icon name="camera-outline" class="text-lg"></ion-icon> Snap
+                </button>
+                <button
+                    class="w-[35px] h-[35px] bg-surface-light border-none rounded-none flex items-center justify-center cursor-pointer hover:bg-[#333] transition-colors">
+                    <span class="w-[25px] h-[25px] rounded-full bg-accent animate-blink block"></span>
+                </button>
+                <button
+                    class="w-[35px] h-[35px] bg-surface-light border-none rounded-none flex items-center justify-center cursor-pointer hover:bg-[#333] transition-colors text-gray-100">
+                    <ion-icon name="grid" class="text-lg"></ion-icon>
+                </button>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
